@@ -6,6 +6,7 @@ iii)The game logic (snake movement, food, collision) is written in Java OOP.
 iv)The scores and user details are stored in a database (SQLite/MySQL)
 
 FEATURES:
+
 1)Game Features:
    i)Classic Snake Game (arrow key controls).
    ii)Snake grows when eating food.
