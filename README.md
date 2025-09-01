@@ -33,7 +33,6 @@ FEATURES:
    v)Composition
 
 UML DIAGRAM:
-
                 ┌───────────────────┐
                 │     GameObject     │  (Abstract Class)
                 ├───────────────────┤
@@ -64,7 +63,7 @@ UML DIAGRAM:
 ├─────────────────────────────┤
 │ + move() : void             │
 │ + grow() : void             │
-│ + checkCollision() :boolean│
+│ + checkCollision() :boolean │
 └─────────▲───────────────────┘
           │ (HAS-A)
           │
