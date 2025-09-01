@@ -13,11 +13,10 @@ FEATURES:
    iii)Score increases with each food.
    iv)Game Over if snake hits wall or itself.
    v)Restart option.
-   vi)Speed can increase as score grows (optional).
 
 2)User Features:
-   i)User Registration (create username + password).
-   ii)User Login (only registered users can play).
+   i)User Registration
+   ii)User Login
    iii)Each user’s scores are saved in the database.
 
 3)Scoreboard Features:
