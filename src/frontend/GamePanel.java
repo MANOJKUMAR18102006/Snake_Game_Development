@@ -83,4 +83,12 @@ public class GamePanel extends JPanel implements ActionListener {
             running = false;
         }
     }
+    
+    public void checkFood() {
+        if (x[0] == foodX && y[0] == foodY) {
+            bodyParts++;
+            score++;
+            newFood();
+        }
+    }
 }
