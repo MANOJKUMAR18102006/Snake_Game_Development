@@ -5,7 +5,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
 
-public class GamePanel extends JPanel implements ActionListener{
+public class GamePanel extends JPanel implements ActionListener {
+
     // screen settings
     static final int WIDTH = 600;
     static final int HEIGHT = 600;
@@ -13,85 +14,161 @@ public class GamePanel extends JPanel implements ActionListener{
     static final int MAX_UNITS = (WIDTH * HEIGHT) / BOX_SIZE;
     static final int SPEED = 120; // bigger = slower
 
-    int foodX;
-    int foodY;
-    
-    int score = 0;
-    
-    Random random;
-    boolean running = false;
+    // snake body coords
+    int[] x = new int[MAX_UNITS];
+    int[] y = new int[MAX_UNITS];
 
-    final int x[] = new int[GAME_UNITS]; // x-coordinates of snake body
-    final int y[] = new int[GAME_UNITS]; // y-coordinates of snake body
-    int bodyParts = 6; // initial snake size
-    char direction = 'R'; // U, D, L, R
+    int snakeLen = 6;   // initial length
+    int score = 0;
+    char dir = 'R';     // snake moving right at start
+    boolean gameOn = false;
+
+    // apple
+    int appleX, appleY;
+    Random rand;
+
     Timer timer;
 
     public GamePanel() {
-        random = new Random();
-        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        this.setBackground(Color.black);
+        rand = new Random();
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.setBackground(Color.BLACK);
         this.setFocusable(true);
-        //this.addKeyListener(new MyKeyAdapter());
+        this.addKeyListener(new MyKey());
+
         startGame();
     }
 
-    public void move() {
-        for (int i = bodyParts; i > 0; i--) {
-            x[i] = x[i - 1];
-            y[i] = y[i - 1];
-        }
-
-        switch (direction) {
-            case 'U' -> y[0] = y[0] - UNIT_SIZE;
-            case 'D' -> y[0] = y[0] + UNIT_SIZE;
-            case 'L' -> x[0] = x[0] - UNIT_SIZE;
-            case 'R' -> x[0] = x[0] + UNIT_SIZE;
-        }
-    }
-
     public void startGame() {
-        newFood();
-        timer = new Timer(DELAY, this);
+        makeApple();
+        gameOn = true;
+        timer = new Timer(SPEED, this);
         timer.start();
     }
 
-    public void newFood() {
-        foodX = random.nextInt((int)(SCREEN_WIDTH / UNIT_SIZE)) * UNIT_SIZE;
-        foodY = random.nextInt((int)(SCREEN_HEIGHT / UNIT_SIZE)) * UNIT_SIZE;
+    public void makeApple() {
+        appleX = rand.nextInt(WIDTH / BOX_SIZE) * BOX_SIZE;
+        appleY = rand.nextInt(HEIGHT / BOX_SIZE) * BOX_SIZE;
     }
-    
-    public void checkCollisions() {
-        // check if head collides with body
-        for (int i = bodyParts; i > 0; i--) {
-            if ((x[0] == x[i]) && (y[0] == y[i])) {
-                running = false;
+
+    public void moveSnake() {
+        for(int i = snakeLen; i > 0; i--) {
+            x[i] = x[i-1];
+            y[i] = y[i-1];
+        }
+
+        if(dir == 'U') y[0] -= BOX_SIZE;
+        else if(dir == 'D') y[0] += BOX_SIZE;
+        else if(dir == 'L') x[0] -= BOX_SIZE;
+        else if(dir == 'R') x[0] += BOX_SIZE;
+
+        // debug line
+        System.out.println("Snake head at: " + x[0] + "," + y[0]);
+    }
+
+    public void checkApple() {
+        if(x[0] == appleX && y[0] == appleY) {
+            snakeLen++;
+            score++;
+            makeApple();
+        }
+    }
+
+    public void checkHit() {
+        // hit self
+        for(int i = snakeLen; i > 0; i--) {
+            if(x[0] == x[i] && y[0] == y[i]) {
+                gameOn = false;
             }
         }
+        // hit wall
+        if(x[0] < 0 || x[0] >= WIDTH || y[0] < 0 || y[0] >= HEIGHT) {
+            gameOn = false;
+        }
 
-        // check if head touches left border
-        if (x[0] < 0) {
-            running = false;
+        if(!gameOn) timer.stop();
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        draw(g);
+    }
+
+    public void draw(Graphics g) {
+        if(gameOn) {
+            // apple
+            g.setColor(Color.RED);
+            g.fillOval(appleX, appleY, BOX_SIZE, BOX_SIZE);
+
+            // snake body
+            for(int i=0;i<snakeLen;i++) {
+                if(i==0) {
+                    g.setColor(Color.GREEN);
+                } else {
+                    g.setColor(Color.ORANGE);
+                }
+                g.fillRect(x[i], y[i], BOX_SIZE, BOX_SIZE);
+            }
+
+            // score
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 22));
+            g.drawString("Score: " + score, 20, 30);
         }
-        // check if head touches right border
-        if (x[0] >= SCREEN_WIDTH) {
-            running = false;
-        }
-        // check if head touches top border
-        if (y[0] < 0) {
-            running = false;
-        }
-        // check if head touches bottom border
-        if (y[0] >= SCREEN_HEIGHT) {
-            running = false;
+        else {
+            gameOver(g);
         }
     }
 
-    public void checkFood() {
-        if (x[0] == foodX && y[0] == foodY) {
-            bodyParts++;
-            score++;
-            newFood();
+    public void gameOver(Graphics g) {
+        g.setColor(Color.RED);
+        g.setFont(new Font("Arial", Font.BOLD, 40));
+        g.drawString("GAME OVER", WIDTH/2 - 120, HEIGHT/2);
+
+        g.setColor(Color.YELLOW);
+        g.setFont(new Font("Arial", Font.PLAIN, 20));
+        g.drawString("Press R to Restart", WIDTH/2 - 90, HEIGHT/2 + 40);
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.PLAIN, 20));
+        g.drawString("Final Score: " + score, WIDTH/2 - 70, HEIGHT/2 + 80);
+    }
+
+    public void restart() {
+        snakeLen = 6;
+        score = 0;
+        dir = 'R';
+        gameOn = true;
+
+        // reset snake body
+        for(int i=0;i<snakeLen;i++) {
+            x[i] = 0;
+            y[i] = 0;
+        }
+        makeApple();
+        timer.start();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(gameOn) {
+            moveSnake();
+            checkApple();
+            checkHit();
+        }
+        repaint();
+    }
+
+    public class MyKey extends KeyAdapter {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int k = e.getKeyCode();
+            if(k == KeyEvent.VK_LEFT && dir != 'R') dir = 'L';
+            else if(k == KeyEvent.VK_RIGHT && dir != 'L') dir = 'R';
+            else if(k == KeyEvent.VK_UP && dir != 'D') dir = 'U';
+            else if(k == KeyEvent.VK_DOWN && dir != 'U') dir = 'D';
+            else if(k == KeyEvent.VK_R && !gameOn) restart();
         }
     }
 }
