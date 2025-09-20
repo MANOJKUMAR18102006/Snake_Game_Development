@@ -63,7 +63,7 @@ public class GamePanel extends JPanel implements ActionListener {
         else if(dir == 'R') x[0] += BOX_SIZE;
 
         // debug line
-        System.out.println("Snake head at: " + x[0] + "," + y[0]);
+        //System.out.println("Snake head at: " + x[0] + "," + y[0]);
     }
 
     public void checkApple() {
