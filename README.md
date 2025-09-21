@@ -30,3 +30,6 @@ FEATURES:
    iii)Abstraction
    iv)Encapsulation
    v)Composition
+
+5)UML diagram:
+![class-diagram](javauml1.jpg)
