@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements ActionListener{
     boolean gameOn = false;
 
     // apple
-    int appleX, appleY;
+    int appleX,appleY;
     Random rand;
 
     Timer timer;
@@ -52,7 +52,7 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     public void moveSnake(){
-        for(int i = snakeLen; i > 0; i--) {
+        for(int i = snakeLen; i > 0; i--){
             x[i] = x[i-1];
             y[i] = y[i-1];
         }
@@ -62,12 +62,12 @@ public class GamePanel extends JPanel implements ActionListener{
         else if(dir == 'L') x[0] -= BOX_SIZE;
         else if(dir == 'R') x[0] += BOX_SIZE;
 
-        // debug line
+        // steps of the snake head
         //System.out.println("Snake head at: " + x[0] + "," + y[0]);
     }
 
     public void checkApple(){
-        if(x[0] == appleX && y[0] == appleY) {
+        if(x[0] == appleX && y[0] == appleY){
             snakeLen++;
             score++;
             makeApple();
@@ -76,8 +76,8 @@ public class GamePanel extends JPanel implements ActionListener{
 
     public void checkHit(){
         // hit self
-        for(int i = snakeLen; i > 0; i--) {
-            if(x[0] == x[i] && y[0] == y[i]) {
+        for(int i = snakeLen; i > 0; i--){
+            if(x[0] == x[i] && y[0] == y[i]){
                 gameOn = false;
             }
         }
