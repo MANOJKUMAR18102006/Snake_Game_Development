@@ -31,6 +31,20 @@ public class GamePanel extends JPanel implements ActionListener {
     Random rand;
 
     Timer timer;
+    private String username;
+
+   public GamePanel(String username) {
+    this.username = username;
+
+    rand = new Random();
+    this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+    this.setBackground(Color.BLACK);
+    this.setFocusable(true);
+    this.addKeyListener(new MyKey());
+
+    startGame();
+    }
+
 
     public GamePanel() {
         rand = new Random();
@@ -141,6 +155,10 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, 20));
         g.drawString("Final Score: " + score, WIDTH/2 - 70, HEIGHT/2 + 80);
+   
+        g.setColor(Color.CYAN);
+        g.setFont(new Font("Arial", Font.PLAIN, 20));
+        g.drawString("Press E to Exit", WIDTH/2 - 70, HEIGHT/2 + 120);
     }
 
     public void restart() {
@@ -168,15 +186,21 @@ public class GamePanel extends JPanel implements ActionListener {
         repaint();
     }
 
-    public class MyKey extends KeyAdapter {
-        @Override
-        public void keyPressed(KeyEvent e) {
-            int k = e.getKeyCode();
-            if(k == KeyEvent.VK_LEFT && dir != 'R') dir = 'L';
-            else if(k == KeyEvent.VK_RIGHT && dir != 'L') dir = 'R';
-            else if(k == KeyEvent.VK_UP && dir != 'D') dir = 'U';
-            else if(k == KeyEvent.VK_DOWN && dir != 'U') dir = 'D';
-            else if(k == KeyEvent.VK_R && !gameOn) restart();
+    public class MyKey extends KeyAdapter{
+    @Override
+    public void keyPressed(KeyEvent e){
+        int k = e.getKeyCode();
+
+        if(k == KeyEvent.VK_LEFT && dir != 'R') dir = 'L';
+        else if(k == KeyEvent.VK_RIGHT && dir != 'L') dir = 'R';
+        else if(k == KeyEvent.VK_UP && dir != 'D') dir = 'U';
+        else if(k == KeyEvent.VK_DOWN && dir != 'U') dir = 'D';
+        else if(k == KeyEvent.VK_R && !gameOn) restart();
+        else if(k == KeyEvent.VK_E && !gameOn) {
+            // Exit to main menu
+            javax.swing.SwingUtilities.getWindowAncestor(GamePanel.this).dispose();
+            new MainMenuFrame(username);
         }
     }
+  }
 }
