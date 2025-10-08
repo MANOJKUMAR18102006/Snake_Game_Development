@@ -4,86 +4,74 @@ import backend.UserAuth;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * A simple registration window for the Snake Game.
- * Allows users to create a new account by entering username and password.
- */
 public class RegisterFrame extends JFrame {
-
-    // UI Components
-    private JTextField usernameInput;
-    private JPasswordField passwordInput;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
     private JButton registerButton;
-    private JLabel statusLabel;
+    private JLabel messageLabel;
 
-    // Constructor
     public RegisterFrame() {
-        // Basic frame setup
-        setTitle("Snake Game - Register");
-        setSize(350, 250);
+        setTitle("Register - Snake Game");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new GridBagLayout());
         setLocationRelativeTo(null);
-        setLayout(new GridBagLayout());  // Using grid layout for alignment
 
-        // Layout manager settings
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Adds spacing between components
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
 
-        // ----- Username -----
-        JLabel usernameLabel = new JLabel("Username:");
+        JLabel userLabel = new JLabel("Username:");
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(usernameLabel, gbc);
+        add(userLabel, gbc);
 
-        usernameInput = new JTextField(15);
+        usernameField = new JTextField(15);
         gbc.gridx = 1;
-        add(usernameInput, gbc);
+        add(usernameField, gbc);
 
-        // ----- Password -----
-        JLabel passwordLabel = new JLabel("Password:");
+        JLabel passLabel = new JLabel("Password:");
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(passwordLabel, gbc);
+        add(passLabel, gbc);
 
-        passwordInput = new JPasswordField(15);
+        passwordField = new JPasswordField(15);
         gbc.gridx = 1;
-        add(passwordInput, gbc);
+        add(passwordField, gbc);
 
-        // ----- Register Button -----
         registerButton = new JButton("Register");
         gbc.gridx = 1;
         gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
         add(registerButton, gbc);
 
-        // ----- Status Message -----
-        statusLabel = new JLabel("");
+        messageLabel = new JLabel(" ");
         gbc.gridx = 1;
         gbc.gridy = 3;
-        add(statusLabel, gbc);
+        add(messageLabel, gbc);
 
-        // ----- Button Action -----
-        registerButton.addActionListener(event -> handleRegister());
+        registerButton.addActionListener(e -> {
+            String user = usernameField.getText().trim();
+            String pass = new String(passwordField.getPassword()).trim();
 
-        // Show the window
+            if (user.isEmpty() || pass.isEmpty()) {
+                messageLabel.setForeground(Color.RED);
+                messageLabel.setText("Fields cannot be empty!");
+                return;
+            }
+
+            if (UserAuth.register(user, pass)) {
+                messageLabel.setForeground(Color.GREEN);
+                messageLabel.setText("Registration successful!");
+                dispose();
+                SwingUtilities.invokeLater(() -> new GameFrame(user));
+            } else {
+                messageLabel.setForeground(Color.RED);
+                messageLabel.setText("Username already exists!");
+            }
+        });
+
+        pack();
+        setResizable(false);
         setVisible(true);
-    }
-
-    // Handles registration logic
-    private void handleRegister() {
-        String username = usernameInput.getText();
-        String password = new String(passwordInput.getPassword());
-
-        if (UserAuth.register(username, password)) {
-            statusLabel.setForeground(Color.GREEN);
-            statusLabel.setText("User registered successfully!");
-        } else {
-            statusLabel.setForeground(Color.RED);
-            statusLabel.setText("Username already exists!");
-        }
-    }
-
-    // Main method (optional) to test this frame directly
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(RegisterFrame::new);
     }
 }
