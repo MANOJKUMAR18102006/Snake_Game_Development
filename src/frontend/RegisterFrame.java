@@ -63,7 +63,7 @@ public class RegisterFrame extends JFrame {
                 messageLabel.setForeground(Color.GREEN);
                 messageLabel.setText("Registration successful!");
                 dispose();
-                SwingUtilities.invokeLater(() -> new GameFrame(user));
+                SwingUtilities.invokeLater(() -> new MainMenuFrame(user));
             } else {
                 messageLabel.setForeground(Color.RED);
                 messageLabel.setText("Username already exists!");

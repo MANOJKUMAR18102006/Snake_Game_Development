@@ -62,6 +62,7 @@ public class LoginFrame extends JFrame {
                 messageLabel.setText("Login Successful!");
                 dispose();
                 new GameFrame(username);
+                //SwingUtilities.invokeLater(() -> new MainMenuFrame(user));
             } else {
                 messageLabel.setForeground(Color.RED);
                 messageLabel.setText("Invalid credentials! Try again.");
