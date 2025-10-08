@@ -1,6 +1,9 @@
 package frontend;
 
 import javax.swing.*;
+
+import frontend.GamePanel.MyKey;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
@@ -12,7 +15,7 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int HEIGHT = 600;
     static final int BOX_SIZE = 25;  // each square
     static final int MAX_UNITS = (WIDTH * HEIGHT) / BOX_SIZE;
-    static final int SPEED = 120; // bigger = slower
+    static final int SPEED = 140; // snake movement speed
 
     // snake body coords
     int[] x = new int[MAX_UNITS];
@@ -63,7 +66,7 @@ public class GamePanel extends JPanel implements ActionListener {
         else if(dir == 'R') x[0] += BOX_SIZE;
 
         // debug line
-        System.out.println("Snake head at: " + x[0] + "," + y[0]);
+        //System.out.println("Snake head at: " + x[0] + "," + y[0]);
     }
 
     public void checkApple() {
@@ -113,8 +116,13 @@ public class GamePanel extends JPanel implements ActionListener {
 
             // score
             g.setColor(Color.WHITE);
-            g.setFont(new Font("Arial", Font.BOLD, 22));
-            g.drawString("Score: " + score, 20, 30);
+            g.setFont(new Font("Arial", Font.BOLD, 24));
+
+            // Center the score text at the top middle
+            String scoreText = "Score: " + score;
+            FontMetrics metrics = getFontMetrics(g.getFont());
+            int textX = (WIDTH - metrics.stringWidth(scoreText)) / 2;
+            g.drawString(scoreText, textX, 30);
         }
         else {
             gameOver(g);
