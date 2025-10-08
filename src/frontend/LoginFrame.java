@@ -5,64 +5,100 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LoginFrame extends JFrame {
-    private JTextField usernameField;
-    private JPasswordField passwordField;
+
+    // Input boxes for username and password
+    private JTextField usernameInput;
+    private JPasswordField passwordInput;
+
+    // Buttons for login and register
     private JButton loginButton, registerButton;
+
+    // Label to show success or error messages
     private JLabel messageLabel;
 
+    // Constructor – runs when the login screen is created
     public LoginFrame() {
+        // Title of the window
         setTitle("Snake Game - Login");
+
+        // Set window size
         setSize(350, 250);
+
+        // Close the program when window is closed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Center the window on screen
         setLocationRelativeTo(null);
+
+        // Use a flexible layout
         setLayout(new GridBagLayout());
-
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,5,5,5);
+        gbc.insets = new Insets(5, 5, 5, 5); // padding between elements
 
-        JLabel userLabel = new JLabel("Username:");
-        gbc.gridx = 0; gbc.gridy = 0;
-        add(userLabel, gbc);
+        // Username Label and Input
+        JLabel usernameLabel = new JLabel("Username:");
+        gbc.gridx = 0;  // column 0
+        gbc.gridy = 0;  // row 0
+        add(usernameLabel, gbc);
 
-        usernameField = new JTextField(15);
+        usernameInput = new JTextField(15);
+        gbc.gridx = 1;  // column 1
+        add(usernameInput, gbc);
+
+        // Password Label and Input
+        JLabel passwordLabel = new JLabel("Password:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(passwordLabel, gbc);
+
+        passwordInput = new JPasswordField(15);
         gbc.gridx = 1;
-        add(usernameField, gbc);
+        add(passwordInput, gbc);
 
-        JLabel passLabel = new JLabel("Password:");
-        gbc.gridx = 0; gbc.gridy = 1;
-        add(passLabel, gbc);
-
-        passwordField = new JPasswordField(15);
-        gbc.gridx = 1;
-        add(passwordField, gbc);
-
+        // Login Button
         loginButton = new JButton("Login");
-        gbc.gridx = 1; gbc.gridy = 2;
+        gbc.gridx = 1;
+        gbc.gridy = 2;
         add(loginButton, gbc);
 
+        // Register Button
         registerButton = new JButton("Register");
-        gbc.gridx = 1; gbc.gridy = 3;
+        gbc.gridx = 1;
+        gbc.gridy = 3;
         add(registerButton, gbc);
 
+        // Message Label
         messageLabel = new JLabel("");
-        gbc.gridx = 1; gbc.gridy = 4;
+        gbc.gridx = 1;
+        gbc.gridy = 4;
         add(messageLabel, gbc);
 
+        // Login Button Action
         loginButton.addActionListener(e -> {
-            String user = usernameField.getText();
-            String pass = new String(passwordField.getPassword());
+            String username = usernameInput.getText();              // get text from username box
+            String password = new String(passwordInput.getPassword()); // get password
 
-            if (UserAuth.login(user, pass)) {
+            // Check login credentials using backend UserAuth class
+            if (UserAuth.login(username, password)) {
                 messageLabel.setForeground(Color.GREEN);
                 messageLabel.setText("Login Successful!");
+
+                // Close login window and open game
                 dispose();
-                new GameFrame(user); // pass username
+                new GameFrame(username); // open game with logged-in user
             } else {
                 messageLabel.setForeground(Color.RED);
-                messageLabel.setText("Invalid credentials!");
+                messageLabel.setText("Invalid credentials! Try again.");
             }
         });
 
+        // Register Button Action
+        registerButton.addActionListener(e -> {
+            // Open registration window
+            new RegisterFrame();
+        });
+
+        // Make the window visible
         setVisible(true);
     }
 }
