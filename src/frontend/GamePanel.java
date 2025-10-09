@@ -2,6 +2,7 @@ package frontend;
 
 import javax.swing.*;
 
+import backend.Leaderboard;
 import frontend.GamePanel.MyKey;
 
 import java.awt.*;
@@ -144,6 +145,8 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void gameOver(Graphics g) {
+
+        Leaderboard.saveScore(username, score);
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.BOLD, 40));
         g.drawString("GAME OVER", WIDTH/2 - 120, HEIGHT/2);
