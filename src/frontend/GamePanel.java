@@ -14,7 +14,7 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int HEIGHT = 600;
     static final int BOX_SIZE = 25;  // each square
     static final int MAX_UNITS = (WIDTH * HEIGHT) / BOX_SIZE;
-    static final int SPEED = 140; // snake movement speed
+    static final int SPEED = 100; // snake movement speed
 
     // snake body coords
     int[] x = new int[MAX_UNITS];
