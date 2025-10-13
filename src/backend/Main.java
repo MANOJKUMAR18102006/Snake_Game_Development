@@ -1,5 +1,4 @@
 package backend;
-
 import frontend.LoginFrame;
 
 public class Main{

@@ -3,11 +3,10 @@ package frontend;
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame {
-    private String username;
+    // Removed unused field 'username'
 
     public GameFrame(String username) {
-        this.username = username;
-        this.add(new GamePanel());
+        this.add(new GamePanel(username));
         this.setTitle("Snake Game - Player: " + username);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);

@@ -3,8 +3,6 @@ package frontend;
 import javax.swing.*;
 
 import backend.Leaderboard;
-import frontend.GamePanel.MyKey;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
